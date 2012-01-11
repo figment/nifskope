@@ -532,6 +532,7 @@ void Mesh::transform()
 #define PROP_LightingShaderProperty "BSLightingShaderProperty"
 #define PROP_BSEffectShaderProperty "BSEffectShaderProperty"
 #define FLAG_ShaderFlags "Shader Flags 2"
+#define FLAG_EffectShaderFlags1 "Effect Shader Flags 1"
 			bool alphaisanim = false;
 			double_sided = false;
 			if ( nif->checkVersion( 0x14020007, 0 ) && nif->itemName( iBlock ) == "NiTriShape" )
@@ -552,14 +553,17 @@ void Mesh::transform()
 						}
 					} else
 					{
-						// enalble double_sided by default for BSEffectShaderProperty
-						// TODO: update when the double_sided flag for BSEffectShaderProperty is found
+						// enable double_sided for BSEffectShaderProperty
 						iProp = nif->getBlock( props[i], PROP_BSEffectShaderProperty );
 						if (iProp.isValid())
-							double_sided = true;
+						{
+							unsigned int sf1 = nif->get<unsigned int>(iProp, FLAG_EffectShaderFlags1);
+							double_sided = sf1 & (1 << SF_Double_Sided);
+						}
 					}
 				}
 			}
+#undef FLAG_EffectShaderFlags1
 #undef PROP_BSEffectShaderProperty
 #undef PROP_LightingShaderProperty
 #undef FLAG_ShaderFlags
@@ -935,7 +939,10 @@ void Mesh::drawShapes( NodeList * draw2nd )
 		shader = scene->renderer.setupProgram( this, shader );
 	
 	if (double_sided)
+	{
+		glDepthMask( GL_FALSE );
 		glDisable( GL_CULL_FACE );
+	}
 
 	// render the triangles
 	if ( sortedTriangles.count() )
@@ -946,7 +953,10 @@ void Mesh::drawShapes( NodeList * draw2nd )
 		glDrawElements( GL_TRIANGLE_STRIP, tristrips[s].count(), GL_UNSIGNED_SHORT, tristrips[s].data() );
 
 	if (double_sided)
+	{
 		glEnable( GL_CULL_FACE );
+		glDepthMask( GL_TRUE );
+	}
 
 	if (!Node::SELECTING)
 		scene->renderer.stopProgram();
