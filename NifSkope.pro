@@ -32,7 +32,6 @@ HEADERS += \
     gl/dds/Stream.h \
     gl/glcontrolable.h \
     gl/glcontroller.h \
-    gl/GLee.h \
     gl/glmarker.h \
     gl/glmesh.h \
     gl/glnode.h \
@@ -40,7 +39,6 @@ HEADERS += \
     gl/glproperty.h \
     gl/glscene.h \
     gl/gltex.h \
-    gl/gltexloaders.h \
     gl/gltools.h \
     gl/marker/constraints.h \
     gl/marker/furniture.h \
@@ -62,17 +60,17 @@ HEADERS += \
     NvTriStrip/qtwrapper.h \
     NvTriStrip/VertexCache.h \
     options.h \
-    qhull/src/libqhull/geom.h \
-    qhull/src/libqhull/io.h \
-    qhull/src/libqhull/libqhull.h \
-    qhull/src/libqhull/mem.h \
-    qhull/src/libqhull/merge.h \
-    qhull/src/libqhull/poly.h \
-    qhull/src/libqhull/qhull_a.h \
-    qhull/src/libqhull/qset.h \
-    qhull/src/libqhull/random.h \
-    qhull/src/libqhull/stat.h \
-    qhull/src/libqhull/user.h \
+    qhull/src/geom.h \
+    qhull/src/io.h \
+    qhull/src/libqhull.h \
+    qhull/src/mem.h \
+    qhull/src/merge.h \
+    qhull/src/poly.h \
+    qhull/src/qhull_a.h \
+    qhull/src/qset.h \
+    qhull/src/random.h \
+    qhull/src/stat.h \
+    qhull/src/user.h \
     qhull.h \
     spellbook.h \
     spells/blocks.h \
@@ -107,7 +105,6 @@ SOURCES += \
     gl/dds/Image.cpp \
     gl/dds/Stream.cpp \
     gl/glcontroller.cpp \
-    gl/GLee.cpp \
     gl/glmarker.cpp \
     gl/glmesh.cpp \
     gl/glnode.cpp \

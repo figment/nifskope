@@ -30,13 +30,6 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ***** END LICENCE BLOCK *****/
 
-
-#include <QCursor>
-#include <QDialog>
-#include <QInputDialog>
-#include <QTimer>
-#include <QUndoStack>
-
 #include "uvedit.h"
 
 #include "../nifmodel.h"
@@ -47,6 +40,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "../NvTriStrip/qtwrapper.h"
 
 #include <math.h>
+#include <GL/glext.h>
+
+#include <QCursor>
+#include <QDialog>
+#include <QInputDialog>
+#include <QTimer>
+#include <QUndoStack>
 
 #define BASESIZE 512.0
 #define GRIDSIZE 16.0
@@ -71,18 +71,18 @@ UVWidget * UVWidget::createEditor( NifModel * nif, const QModelIndex & idx )
 	return uvw;
 }
 
-static GLshort vertArray[4][2] = {
+GLshort UVWidget::vertArray[4][2] = {
 	{ 0, 0 }, { 1, 0 },
 	{ 1, 1 }, { 0, 1 }
 };
 
-static GLshort texArray[4][2] = {
+GLshort UVWidget::texArray[4][2] = {
 	{ 0, 0 }, { 1, 0 },
 	{ 1, 1 }, { 0, 1 }
 };
 
-static GLdouble glUnit = ( 1.0 / BASESIZE );
-static GLdouble glGridD = GRIDSIZE * glUnit;
+GLdouble UVWidget::glUnit = ( 1.0 / BASESIZE );
+GLdouble UVWidget::glGridD = GRIDSIZE * glUnit;
 
 UVWidget::UVWidget( QWidget * parent )
 	: QGLWidget( QGLFormat( QGL::SampleBuffers ), parent, 0, Qt::Tool | Qt::WindowStaysOnTopHint ), undoStack( new QUndoStack( this ) )
@@ -191,10 +191,9 @@ UVWidget::~UVWidget()
 
 void UVWidget::initializeGL()
 {
+	GLTools::initializeGL();
+
 	glMatrixMode( GL_MODELVIEW );
-
-	initializeTextureUnits( context() );
-
 	glShadeModel( GL_SMOOTH );
 	//glShadeModel( GL_LINE_SMOOTH );
 
@@ -221,8 +220,8 @@ void UVWidget::initializeGL()
 	glTexCoordPointer( 2, GL_SHORT, 0, texArray );
 
 	// check for errors
-	// XXX disabled: gluErrorString not in GLee or QtOpenGL
-	//GLenum err;
+	GLenum err;
+	// FIXME
 	//while ( ( err = glGetError() ) != GL_NO_ERROR ) {
 	//	qDebug() << "GL ERROR (init) : " << (const char *) gluErrorString( err );
 	//}

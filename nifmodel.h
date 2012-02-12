@@ -264,6 +264,9 @@ protected:
 	
 	bool		evalVersion( NifItem * item, bool chkParents = false ) const;
 
+	bool		inherits( const NifItem * item, const QString & ancestor ) const;
+
+
 	//! NIF file version
 	quint32 version;
 	

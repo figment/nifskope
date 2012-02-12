@@ -214,7 +214,7 @@ void AlphaProperty::update( const NifModel * nif, const QModelIndex & block )
 	}
 }
 
-void glProperty( AlphaProperty * p )
+void GLTools::glProperty( AlphaProperty * p ) const
 {
 	if ( p && p->alphaBlend && Options::blending() )
 	{
@@ -260,7 +260,7 @@ void ZBufferProperty::update( const NifModel * nif, const QModelIndex & block )
 	}
 }
 
-void glProperty( ZBufferProperty * p )
+void GLTools::glProperty( ZBufferProperty * p ) const
 {
 	if ( p ) 
 	{
@@ -615,7 +615,7 @@ int TexturingProperty::getId( const QString & texname )
 		return -1;
 }
 
-void glProperty( TexturingProperty * p )
+void GLTools::glProperty( TexturingProperty * p ) const
 {
 	if ( p && Options::texturing() && p->bind( 0 ) )
 	{
@@ -689,7 +689,7 @@ void TextureProperty::setController( const NifModel * nif, const QModelIndex & i
 	}
 }
 
-void glProperty( TextureProperty * p )
+void GLTools::glProperty( TextureProperty * p ) const
 {
 	if ( p && Options::texturing() && p->bind() )
 	{
@@ -848,7 +848,7 @@ void MaterialProperty::setController( const NifModel * nif, const QModelIndex & 
 	}
 }
 
-void glProperty( MaterialProperty * p, SpecularProperty * s )
+void GLTools::glProperty( MaterialProperty * p, SpecularProperty * s ) const
 {
 	if ( p )
 	{
@@ -897,7 +897,7 @@ void WireframeProperty::update( const NifModel * nif, const QModelIndex & block 
 	}
 }
 
-void glProperty( WireframeProperty * p )
+void GLTools::glProperty( WireframeProperty * p ) const
 {
 	if ( p && p->wire )
 	{
@@ -925,7 +925,7 @@ void VertexColorProperty::update( const NifModel * nif, const QModelIndex & bloc
 	}
 }
 
-void glProperty( VertexColorProperty * p, bool vertexcolors )
+void GLTools::glProperty( VertexColorProperty * p, bool vertexcolors ) const
 {
 	// FIXME
 	
@@ -1020,7 +1020,7 @@ void StencilProperty::update( const NifModel * nif, const QModelIndex & block )
 	}
 }
 
-void glProperty( StencilProperty * p )
+void GLTools::glProperty( StencilProperty * p ) const
 {
 	if ( p )
 	{
@@ -1054,7 +1054,7 @@ void BSShaderLightingProperty::update( const NifModel * nif, const QModelIndex &
 	}
 }
 
-void glProperty( BSShaderLightingProperty * p )
+void GLTools::glProperty( BSShaderLightingProperty * p ) const
 {
 	if ( p && Options::texturing() && p->bind( 0 ) )
 	{

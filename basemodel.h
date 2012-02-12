@@ -60,6 +60,9 @@ public:
 	//! Destructor
 	~BaseModel();
 	
+	inline bool inherits(const char *classname) const
+	{ return QAbstractItemModel::inherits(classname); }
+
 	//! Clear model data.
 	virtual void clear() = 0;
 	
@@ -261,6 +264,10 @@ protected:
 	bool		evalCondition( NifItem * item, bool chkParents = false ) const;
 	//! Evaluate conditions
 	bool		evalConditionHelper( NifItem * item, const QString & cond ) const;
+	// returns true if the block containing index inherits ancestor
+	virtual bool inherits( const QModelIndex & index, const QString & ancestor ) const;
+	// returns true if the block containing index inherits ancestor
+	virtual bool inherits( const NifItem * item, const QString & ancestor ) const;
 	
 	//! Convert a version number to a string
 	virtual QString ver2str( quint32 ) const = 0;

@@ -672,6 +672,9 @@ public:
 				i = i->parent();
 				left = i->arg();
 			}
+			// if left is a model class name
+			if ( model->inherits( item, left ) )
+				return QVariant(true);
 			i = model->getItem( i->parent(), left );
 			if (i) {
 				if ( i->value().isCount() )
@@ -801,3 +804,18 @@ bool BaseModel::evalCondition( const QModelIndex & index, bool chkParents ) cons
 	return false;
 }
 
+// returns true if the block containing index inherits ancestor
+bool BaseModel::inherits( const QModelIndex & index, const QString & ancestor ) const
+{
+	Q_UNUSED(index); 
+	Q_UNUSED(ancestor);
+	return false;
+}
+
+// returns true if the block containing index inherits ancestor
+bool BaseModel::inherits( const NifItem * item, const QString & ancestor ) const
+{
+	Q_UNUSED(item); 
+	Q_UNUSED(ancestor);
+	return false;
+}

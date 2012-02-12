@@ -916,6 +916,13 @@ bool NifModel::inherits( const QModelIndex & idx, const QString & aunty ) const
 		return false;
 	return inherits( itemName( index( x+1, 0 ) ), aunty );
 }
+bool NifModel::inherits( const NifItem * item, const QString & aunty ) const
+{
+	int x = getBlockNumber( const_cast<NifItem*>(item) );
+	if ( x < 0 )
+		return false;
+	return inherits( itemName( index( x+1, 0 ) ), aunty );
+}
 
 
 /*
