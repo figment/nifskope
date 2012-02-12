@@ -2,7 +2,7 @@
 
 BSD License
 
-Copyright (c) 2005-2010, NIF File Format Library and Tools
+Copyright (c) 2005-2012, NIF File Format Library and Tools
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -254,7 +254,7 @@ GLView::GLView( const QGLFormat & format, const QGLWidget * shareWidget )
 	tAnim->addWidget( extraspace );
 #endif
 	
-	tView = new QToolBar( tr("View") );
+	tView = new QToolBar( tr("Render View") );
 	tView->setObjectName( "ViewTool" );
 	tView->setAllowedAreas( Qt::TopToolBarArea | Qt::BottomToolBarArea );
 	tView->setIconSize( QSize( 16, 16 ) );
@@ -615,7 +615,7 @@ int indexAt( /*GLuint *buffer,*/ NifModel *model, Scene *scene, QList<DrawFunc> 
 	// Modifying this to a color-key O(1) selection
 	// because Open GL 3.0 says glRenderMode is deprecated
 	// and because ATI opengl API implementation of GL_SELECT corrupts NifSkope memory
-	// Caution: this works in 32 bit frmae buffer modes only.
+	// Caution: this works in 32 bit frame buffer modes only.
 	//
 	// State is stored by the caller.
 	// Prepare the back color buffer for sharp edges and no shading.

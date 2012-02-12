@@ -2,7 +2,7 @@
 
 BSD License
 
-Copyright (c) 2005-2010, NIF File Format Library and Tools
+Copyright (c) 2005-2012, NIF File Format Library and Tools
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -127,6 +127,9 @@ public slots:
 	
 	//! Display the "About NifSkope" window.
 	void about();
+
+	//! Reset "block details"
+	void sltResetBlockDetails();
 	
 protected slots:
 	//! Select a NIF index

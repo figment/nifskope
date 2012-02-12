@@ -2,7 +2,7 @@
 
 BSD License
 
-Copyright (c) 2005-2010, NIF File Format Library and Tools
+Copyright (c) 2005-2012, NIF File Format Library and Tools
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "basemodel.h"
 #include "niftypes.h"
+#include "options.h"
 
 #include <QByteArray>
 #include <QColor>
@@ -361,7 +362,10 @@ QVariant BaseModel::data( const QModelIndex & index, int role ) const
 		return QVariant();
 	
 	int column = index.column();
-	
+
+	if (role == NifSkopeDisplayRole)
+		role = Qt::DisplayRole;
+
 	switch ( role )
 	{
 		case Qt::DisplayRole:

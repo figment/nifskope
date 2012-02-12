@@ -2,7 +2,7 @@
 
 BSD License
 
-Copyright (c) 2005-2010, NIF File Format Library and Tools
+Copyright (c) 2005-2012, NIF File Format Library and Tools
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -578,9 +578,6 @@ void Node::update( const NifModel * nif, const QModelIndex & index )
 	{
 		PropertyList newProps;
 		foreach ( qint32 l, nif->getLinkArray( iBlock, "Properties" ) )
-			if ( Property * p = scene->getProperty( nif, nif->getBlock( l ) ) )
-				newProps.add( p );
-		foreach ( qint32 l, nif->getLinkArray( iBlock, "BS Properties" ) )
 			if ( Property * p = scene->getProperty( nif, nif->getBlock( l ) ) )
 				newProps.add( p );
 		properties = newProps;
