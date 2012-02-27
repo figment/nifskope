@@ -581,6 +581,9 @@ void Node::update( const NifModel * nif, const QModelIndex & index )
 		foreach ( qint32 l, nif->getLinkArray( iBlock, "Properties" ) )
 			if ( Property * p = scene->getProperty( nif, nif->getBlock( l ) ) )
 				newProps.add( p );
+		foreach ( qint32 l, nif->getLinkArray( iBlock, "BS Properties" ) )
+			if ( Property * p = scene->getProperty( nif, nif->getBlock( l ) ) )
+				newProps.add( p );
 		properties = newProps;
 		
 		children.clear();
@@ -924,7 +927,14 @@ void GLTools::drawHvkShape( const NifModel * nif, const QModelIndex & iShape, QS
 	stack.push( iShape );
 	
 	//qWarning() << "draw shape" << nif->getBlockNumber( iShape ) << nif->itemName( iShape );
+	const float bhkScaleFactorOblivion = 6.9969f;
+	const float bhkScaleFactorSkyrim = 69.9912f;
 	
+	float bhkScaleFactor = bhkScaleFactorOblivion;
+	if ( nif->checkVersion( 0x14020007, 0 ) )
+		bhkScaleFactor = bhkScaleFactorSkyrim;
+	float bhkScaleFactorInv = 1.0f / bhkScaleFactor;
+
 	QString name = nif->itemName( iShape );
 	if ( name == "bhkListShape" )
 	{
@@ -951,23 +961,28 @@ void GLTools::drawHvkShape( const NifModel * nif, const QModelIndex & iShape, QS
 	}
 	else if ( name == "bhkTransformShape" || name == "bhkConvexTransformShape" )
 	{
-		glPushMatrix();
 		Matrix4 tm = nif->get<Matrix4>( iShape, "Transform" );
 		glMultMatrix( tm );
 		drawHvkShape( nif, nif->getBlock( nif->getLink( iShape, "Shape" ) ), stack, scene, origin_color3fv );
-		glPopMatrix();
 	}
 	else if ( name == "bhkSphereShape" )
 	{
+		glPushMatrix();
+		glScalef( bhkScaleFactorSkyrim, bhkScaleFactorSkyrim, bhkScaleFactorSkyrim );
+
 		//glLoadName( nif->getBlockNumber( iShape ) );
 		if (Node::SELECTING) {
 			int s_nodeId = ID2COLORKEY( nif->getBlockNumber( iShape ) );
 			glColor4ubv( (GLubyte *)&s_nodeId );
 		}
 		drawSphere( Vector3(), nif->get<float>( iShape, "Radius" ) );
+		glPopMatrix();
 	}
 	else if ( name == "bhkMultiSphereShape" )
 	{
+		glPushMatrix();
+		glScalef( bhkScaleFactorInv, bhkScaleFactorInv, bhkScaleFactorInv );
+
 		//glLoadName( nif->getBlockNumber( iShape ) );
 		if (Node::SELECTING) {
 			int s_nodeId = ID2COLORKEY( nif->getBlockNumber( iShape ) );
@@ -978,9 +993,13 @@ void GLTools::drawHvkShape( const NifModel * nif, const QModelIndex & iShape, QS
 		{
 			drawSphere( nif->get<Vector3>( iSpheres.child( r, 0 ), "Center" ), nif->get<float>( iSpheres.child( r, 0 ), "Radius" ) );
 		}
+		glPopMatrix();
 	}
 	else if ( name == "bhkBoxShape" )
 	{
+		glPushMatrix();
+		glScalef( bhkScaleFactorOblivion, bhkScaleFactorOblivion, bhkScaleFactorOblivion );
+
 		//glLoadName( nif->getBlockNumber( iShape ) );
 		if (Node::SELECTING) {
 			int s_nodeId = ID2COLORKEY( nif->getBlockNumber( iShape ) );
@@ -988,22 +1007,26 @@ void GLTools::drawHvkShape( const NifModel * nif, const QModelIndex & iShape, QS
 		}
 		Vector3 v = nif->get<Vector3>( iShape, "Dimensions" );
 		drawBox( v, - v );
+		glPopMatrix();
 	}
 	else if ( name == "bhkCapsuleShape" )
 	{
+		glPushMatrix();
+		glScalef( bhkScaleFactorOblivion, bhkScaleFactorOblivion, bhkScaleFactorOblivion );
+
 		//glLoadName( nif->getBlockNumber( iShape ) );
 		if (Node::SELECTING) {
 			int s_nodeId = ID2COLORKEY( nif->getBlockNumber( iShape ) );
 			glColor4ubv( (GLubyte *)&s_nodeId );
 		}
 		drawCapsule( nif->get<Vector3>( iShape, "First Point" ), nif->get<Vector3>( iShape, "Second Point" ), nif->get<float>( iShape, "Radius" ) );
+		glPopMatrix();
 	}
 	else if ( name == "bhkNiTriStripsShape" )
 	{
 		glPushMatrix();
-		float s = 1.0f / 7.0f;
-		glScalef( s, s, s );
-		
+		glScalef( 1.0f/bhkScaleFactorOblivion, 1.0f/bhkScaleFactorOblivion, 1.0f/bhkScaleFactorOblivion );
+			
 		//glLoadName( nif->getBlockNumber( iShape ) );
 		if (Node::SELECTING) {
 			int s_nodeId = ID2COLORKEY( nif->getBlockNumber( iShape ) );
@@ -1051,12 +1074,15 @@ void GLTools::drawHvkShape( const NifModel * nif, const QModelIndex & iShape, QS
 	}
 	else if ( name == "bhkConvexVerticesShape" )
 	{
+		glPushMatrix();
+		glScalef( 10.0f, 10.0f, 10.0f );
 		//glLoadName( nif->getBlockNumber( iShape ) );
 		if (Node::SELECTING) {
 			int s_nodeId = ID2COLORKEY( nif->getBlockNumber( iShape ) );
 			glColor4ubv( (GLubyte *)&s_nodeId );
 		}
 		drawConvexHull( nif->getArray<Vector4>( iShape, "Vertices" ), nif->getArray<Vector4>( iShape, "Normals" ) );
+		glPopMatrix();
 	}
 	else if ( name == "bhkMoppBvTreeShape" )
 	{
@@ -1074,6 +1100,9 @@ void GLTools::drawHvkShape( const NifModel * nif, const QModelIndex & iShape, QS
 	}
 	else if ( name == "bhkPackedNiTriStripsShape" )
 	{
+		glPushMatrix();
+		glScalef( bhkScaleFactorInv, bhkScaleFactorInv, bhkScaleFactorInv );
+
 		//glLoadName( nif->getBlockNumber( iShape ) );
 		if (Node::SELECTING) {
 			int s_nodeId = ID2COLORKEY( nif->getBlockNumber( iShape ) );
@@ -1186,8 +1215,9 @@ void GLTools::drawHvkShape( const NifModel * nif, const QModelIndex & iShape, QS
 				}
 			}
 		}
+		glPopMatrix();
 	}
-	
+
 	stack.pop();
 }
 
@@ -1940,3 +1970,4 @@ const Transform & BillboardNode::viewTrans() const
 	scene->viewTrans.insert( nodeId, t );
 	return scene->viewTrans[ nodeId ];
 }
+

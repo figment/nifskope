@@ -59,9 +59,6 @@ public:
 	BaseModel( QObject * parent = 0 );
 	//! Destructor
 	~BaseModel();
-	
-	inline bool inherits(const char *classname) const
-	{ return QAbstractItemModel::inherits(classname); }
 
 	//! Clear model data.
 	virtual void clear() = 0;
@@ -159,7 +156,16 @@ public:
 	bool evalCondition( const QModelIndex & idx, bool chkParents = false ) const;
 	//! Evaluate version.
 	bool evalVersion( const QModelIndex & idx, bool chkParents = false ) const;
-	
+	//! Is name a NiBlock identifier (<niobject abstract="0"> or <niobject abstract="1">)?
+	virtual bool isAncestorOrNiBlock( const QString & /*name*/ ) const { return false; };
+	// returns true if the block containing index inherits ancestor
+	virtual bool inherits( const QModelIndex & index, const QString & ancestor ) const;
+	// returns true if the block containing index inherits ancestor
+	virtual bool inherits( const NifItem * item, const QString & ancestor ) const;
+	// This is here to avoid compiler confusion with QObject::inherits.
+	bool inherits ( const char * className ) const {
+		return QObject::inherits(className);
+	}
 	//! Get version as a string
 	virtual QString getVersion() const = 0;
 	//! Get version as a number
@@ -264,10 +270,6 @@ protected:
 	bool		evalCondition( NifItem * item, bool chkParents = false ) const;
 	//! Evaluate conditions
 	bool		evalConditionHelper( NifItem * item, const QString & cond ) const;
-	// returns true if the block containing index inherits ancestor
-	virtual bool inherits( const QModelIndex & index, const QString & ancestor ) const;
-	// returns true if the block containing index inherits ancestor
-	virtual bool inherits( const NifItem * item, const QString & ancestor ) const;
 	
 	//! Convert a version number to a string
 	virtual QString ver2str( quint32 ) const = 0;

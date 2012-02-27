@@ -146,7 +146,7 @@ public:
 				else if ( i->value().isFileVersion() )
 					return QVariant( i->value().toFileVersion() );
 			}
-			QVariant(0);
+			return QVariant(0);
 		}
 		return v;
 	}
@@ -902,7 +902,7 @@ void NifModel::insertAncestor( NifItem * parent, const QString & identifier, int
 		msg( Message() << tr("unknown ancestor %1").arg(identifier) );
 }
 
-bool NifModel::inherits( const QString & name, const QString & aunty )
+bool NifModel::inherits( const QString & name, const QString & aunty ) const
 {
 	 if ( name == aunty ) return true;
 	NifBlock * type = blocks.value( name );

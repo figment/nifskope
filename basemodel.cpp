@@ -139,20 +139,19 @@ int BaseModel::evaluateString( NifItem * array, const QString & text ) const
 				dim1 = getItem( dim1, left );
 				if ( ! dim1 )
 				{
-					msg( Message() << tr("failed to get array size for array") << array->name() );
-					return 0;
+					d1 = 0;
 				}
-		
-				if ( dim1->childCount() == 0 )
+				else if ( dim1->childCount() == 0 )
+				{
 					d1 = dim1->value().toCount();
+				}
 				else
 				{
 					NifItem * item = dim1->child( array->row() );
 					if ( item )
 						d1 = item->value().toCount();
 					else {
-						msg( Message() << tr("failed to get array size for array ") << array->name() );
-						return 0;
+						d1 = 0;
 					};
 				}
 			}
@@ -667,6 +666,7 @@ public:
 		if ( v.type() == QVariant::String ) {
 			QString left = v.toString();
 			const NifItem * i = item;
+			// resolve "ARG"
 			while ( left == "ARG" ) {
 				if ( ! i->parent() )	return false;
 				i = i->parent();
@@ -682,6 +682,16 @@ public:
 				else if ( i->value().isFileVersion() )
 					return QVariant( i->value().toFileVersion() );
 			}
+			//// resolve reference to block type
+			//// is the condition string a type?
+			//if (model->isAncestorOrNiBlock(left)) {
+			//	// get the type of the current block
+			//	const NifItem * block = i;
+			//	while (block->parent() && block->parent()->parent() ) {
+			//		block = block->parent();
+			//	};
+			//	return QVariant(model->inherits(block->name(), left));
+			//}
 			return QVariant(0);
 		}
 		return v;
