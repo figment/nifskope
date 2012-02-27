@@ -136,6 +136,8 @@ public:
 	QVariant operator()(const QVariant &v) const {
 		if ( v.type() == QVariant::String ) {
 			QString left = v.toString();
+			if ( model->inherits( item, left ) ) // amorilia's inheritance check
+				return QVariant(true);
 			NifItem * i = const_cast<NifItem*>(item);
 			i = model->getItem( i, left );
 			if (i) {
